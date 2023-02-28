@@ -16,7 +16,7 @@ const Modal = ({selectedImg, setSelectedImg, selectedDetail}) => {
         animate={{opacity: 1}}
       >
         <motion.div 
-        initial={{ y: "-100vh" }}
+        initial={{ y: "-130vh" }}
         animate={{ y: 0 }} >
           <div className='wrap'><img src={selectedImg} alt="enlarged pic" /></div>
           

@@ -5,7 +5,7 @@ import {Typography} from '@mui/material';
 import moment from 'moment';
 import Option from './Option';
 
-const ImageGrid =({setSelectedImg, setSelectedDetail}) => {
+const ImageGrid =({ setSelectedImg, setSelectedDetail}) => {
 
     const {doc} = useFirestore('images');
     const [hoverIndex, setHoverIndex] = useState(null);
@@ -16,7 +16,7 @@ const ImageGrid =({setSelectedImg, setSelectedDetail}) => {
             <motion.div className='img-wrap' key={d.id}
             
             //animation part
-            whileHover={{opacity:0.8}}
+            whileHover={{opacity:0.9}}
             layout
             >
                 <motion.img src={d.url} alt="uploaded image" 
@@ -45,9 +45,7 @@ const ImageGrid =({setSelectedImg, setSelectedDetail}) => {
                 <h2 className={`text-overlay ${hoverIndex === d.id ? "show" : ""}`} >
                     {d.formDetail.title}
                 </h2>
-                <Option onClick={()=> {
-                    setSelectedImg(d.url);
-                    setSelectedDetail(d.formDetail)}} selectedImg={d} />
+                <Option setSelectedImg={setSelectedImg} setSelectedDetail={setSelectedDetail} selectedImg={d}/>
             </motion.div>
             
       ))}

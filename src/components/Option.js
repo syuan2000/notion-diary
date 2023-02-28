@@ -6,8 +6,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
 import { IconButton } from '@mui/material';
 import { Delete, MoreHoriz, ZoomIn } from '@mui/icons-material';
+import deleteDocument from '../firebase/deleteDocument';
 
-export default function Option(selectedDetail) {
+export default function Option({setSelectedImg, setSelectedDetail, selectedImg}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -16,9 +17,20 @@ export default function Option(selectedDetail) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleDetail = () => {
+  const handleDetail = () =>{
+    setSelectedImg(selectedImg.url);
+    setSelectedDetail(selectedImg.formDetail);
 
-  };
+  }
+  const handleDelete = async() =>{
+    try{
+      await deleteDocument('images', selectedImg.id);
+
+    } catch(error){
+      alert(error);
+      console.log(error)
+    }
+  }
   
   return (
     <React.Fragment>
@@ -78,7 +90,7 @@ export default function Option(selectedDetail) {
           </ListItemIcon>
           Detail
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleDelete}>
           <ListItemIcon>
             <Delete />
           </ListItemIcon>
