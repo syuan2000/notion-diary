@@ -78,8 +78,11 @@ const UploadForm = () =>{
         setInputFields([...inputFields, newfield])
     }
     const removeFields= (index)=>{
+        console.log(index)
+        console.log(inputFields)
         let data = [...inputFields];
         data.splice(index,1)
+        console.log(data)
         setInputFields(data)
         onFormUpdate('comment',data)
     }
@@ -106,7 +109,7 @@ const UploadForm = () =>{
                                 </Tooltip>
                             }
                             {index>0 && <Tooltip title="Delete comments" placement='right' style={{'marginLeft': '10px'}}>
-                                    <IconButton  onClick={removeFields}>
+                                    <IconButton  onClick={() => removeFields(index)}>
                                             <Delete />
                                     </IconButton> 
                                 </Tooltip>
