@@ -10,6 +10,12 @@ const ImageGrid =({ setSelectedImg, setSelectedDetail}) => {
     const {doc} = useFirestore('images');
     const [hoverIndex, setHoverIndex] = useState(null);
 
+    // let newlist = doc.filter((d)=>{
+    //     if (d.formDetail.title==='山海'){
+    //         return d.formDetail.title==='山海'
+    //     }
+    // })
+
     return (
       <div className='img-grid'>
         {doc && doc.map(d => (
@@ -23,7 +29,6 @@ const ImageGrid =({ setSelectedImg, setSelectedDetail}) => {
                     initial={{opacity: 0}}
                     animate={{opacity: 1}}
                     transition={{delay: 2}}
-                    
                     onMouseEnter={() => setHoverIndex(d.id)}
                     onMouseLeave={() => setHoverIndex(null)}
    
@@ -37,14 +42,18 @@ const ImageGrid =({ setSelectedImg, setSelectedDetail}) => {
                     left:0,
                     color:'white',
                     background:'rgba(0,0,0,.3)',
-                    p:'5px',
+                    p:'4px',
                     borderTopRightRaduis:8,
                 }}>
-                    {moment(new Date()- 500*60*60).fromNow()}
+                    {d.createdAt && moment(d.createdAt.toDate()).fromNow()}
                 </Typography>
-                <h2 className={`text-overlay ${hoverIndex === d.id ? "show" : ""}`} >
-                    {d.formDetail.title}
-                </h2>
+                <div className={`text-overlay ${hoverIndex === d.id ? "show" : ""}`} >
+                    <h2 >
+                        {d.formDetail.title}
+                    </h2>
+                    <p>{d.formDetail.date}</p>
+                </div>
+                
                 <Option setSelectedImg={setSelectedImg} setSelectedDetail={setSelectedDetail} selectedImg={d}/>
             </motion.div>
             
