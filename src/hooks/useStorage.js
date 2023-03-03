@@ -16,7 +16,7 @@ const useStorage = (file, formDetail) =>{
         // snapshot object in time of the upload of the moment
         // the third arg is if there's an error, and the forth one is after the action is completed
         storageRef.put(file).on('state_changed', (snap)=>{
-            let percentage = Math.round(snap.bytesTransferred / snap.totalBytes) * 100;
+            let percentage = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
             setProgress(percentage);
 
         }, (err)=>{

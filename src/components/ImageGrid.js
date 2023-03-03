@@ -1,24 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import useFirestore from '../hooks/useFirestore';
 import {motion} from 'framer-motion';
 import {Typography} from '@mui/material';
 import moment from 'moment';
 import Option from './Option';
 
-const ImageGrid =({ setSelectedImg, setSelectedDetail}) => {
+const ImageGrid =({ setSelectedImg, setSelectedDetail, tagFilter}) => {
 
     const {doc} = useFirestore('images');
     const [hoverIndex, setHoverIndex] = useState(null);
+    const [imageList, setImageList] = useState([]);
 
-    // let newlist = doc.filter((d)=>{
-    //     if (d.formDetail.title==='山海'){
-    //         return d.formDetail.title==='山海'
-    //     }
-    // })
+    useEffect(() => {
+        setImageList(doc);
+    }, [doc]);
+
+    // Function to get filtered list
+    const getFilteredList = () => {
+        if (!imageList) return [];
+        // Avoid filter when selectedCategory is null
+        if (tagFilter.length === 0) {
+          return imageList;
+        }
+        return imageList.filter((list) => {
+          return tagFilter.every((t) => list.formDetail.tag.includes(t));
+        });
+      };
+
+    // Avoid duplicate function calls with useMemo
+    var filteredList = useMemo(getFilteredList, [tagFilter, imageList]);
 
     return (
       <div className='img-grid'>
-        {doc && doc.map(d => (
+        {filteredList && filteredList.map(d => (
             <motion.div className='img-wrap' key={d.id}
             
             //animation part
@@ -31,7 +45,6 @@ const ImageGrid =({ setSelectedImg, setSelectedDetail}) => {
                     transition={{delay: 2}}
                     onMouseEnter={() => setHoverIndex(d.id)}
                     onMouseLeave={() => setHoverIndex(null)}
-   
                 />
                 <Typography
                 variant='boday2'

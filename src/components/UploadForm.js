@@ -15,28 +15,23 @@ const Tags = [
   { label: "Dessert", value: "Dessert"}
 ];
 
-const UploadForm = () =>{
+const UploadForm = ({showForm}) =>{
 
+    // so we don't need to create state for each input
     const formInitialDetails={
         title:"",
         date:"",
+        tag:[""],
         comment:[""]
     }
 
-    const [selectedDay, setSelectedDay] = useState();
-    const footer = selectedDay ? (
-        <p>{format(selectedDay, 'PPP')}</p>
-      ) : (
-        <p>Please pick a day.</p>
-      );
-
-    const [showForm, setShowForm] = useState(false);
     const [formDetail, setFormDetail] = useState(formInitialDetails);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
 
     const type = ['image/png','image/jpeg']
 
+    
     // leaves the rest of the details intact only change one field
     const onFormUpdate = (category, value) =>{
         setFormDetail({
@@ -45,9 +40,45 @@ const UploadForm = () =>{
         })
     }
 
+    // deal with comments
+    const [inputFields, setInputFields] = useState([{comment:""}])
+    const handleFormChange = (index, e) => {
+        let data = [...inputFields];
+        data[index]['comment']= e.target.value;
+        setInputFields(data);
+        onFormUpdate('comment',inputFields)
+     }
+    const addFields = () => {
+        let newfield = {comment:''};
+        setInputFields([...inputFields, newfield])
+    }
+    const removeFields= (index)=>{
+        let data = [...inputFields];
+        data.splice(index,1)
+        setInputFields(data)
+        onFormUpdate('comment',data)
+    }
+
+    // deal with tags
+    const [selectedTag, setSelectedTag] = useState([]);
+    const addTag = (option) =>{
+        setSelectedTag(option);
+    }
+
+    // deal with date picker
+    const [selectedDay, setSelectedDay] = useState();
+    const footer = selectedDay ? (
+        <p>{format(selectedDay, 'PPP')}</p>
+      ) : (
+        <p>Please pick a day.</p>
+      );
+
     const changeHandler = (e) =>{
         let selected = e.target.files[0];
         onFormUpdate('date',selectedDay ? format(selectedDay, 'PPP'): "")
+        let tag = selectedTag.map(t=>t.value)
+        onFormUpdate('tag',tag)
+
         if (selected && type.includes(selected.type)){
             setFile(selected);
             setError(null);
@@ -57,6 +88,7 @@ const UploadForm = () =>{
         }
     }
 
+    //reset form
     useEffect(()=>{
         if (!showForm){
             setInputFields([{comment:""}]);
@@ -65,37 +97,12 @@ const UploadForm = () =>{
         }
     }, [showForm])
 
-    const [inputFields, setInputFields] = useState([{comment:""}])
-    const handleFormChange = (index, e) => {
-        let data = [...inputFields];
-        data[index]['comment']= e.target.value;
-        setInputFields(data);
-
-        onFormUpdate('comment',inputFields)
-     }
-    const addFields = () => {
-        let newfield = {comment:''};
-        setInputFields([...inputFields, newfield])
-    }
-    const removeFields= (index)=>{
-        console.log(index)
-        console.log(inputFields)
-        let data = [...inputFields];
-        data.splice(index,1)
-        console.log(data)
-        setInputFields(data)
-        onFormUpdate('comment',data)
-    }
-
     return(
         <>
-            <label className='file' onClick={() => setShowForm(!showForm)}>
-                {showForm ? '-' : '+'} 
-            </label>
-            {showForm && 
             <form>
                 <input className='inputText' type="text" placeholder='Title' value={formDetail.title} onChange={(e)=> onFormUpdate('title', e.target.value)} required="required"/>
                 <br />
+                <Select options={Tags} components={animatedComponents} placeholder="Select one or multiple tags" onChange={addTag} isMulti />
                 {inputFields.map((input, index) => {
                     return (
                         <div key={index}>
@@ -117,8 +124,7 @@ const UploadForm = () =>{
                         </div>
                     )
                 })}
-                <Select options={Tags} components={animatedComponents} placeholder="Select one or multiple tags"
-                  isMulti />
+                
                 <DayPicker className='inputDate' mode="single"
                     selected={selectedDay}
                     onSelect={setSelectedDay}
@@ -133,10 +139,10 @@ const UploadForm = () =>{
                 <div className='output'>
                     {error && <div className='error'>{ error }</div>}
                     {file && 
-                    <ProgressBar file={file} setFile={setFile} formDetail={formDetail} setShowForm={setShowForm} />
+                    <ProgressBar file={file} setFile={setFile} formDetail={formDetail} />
                 }
                 </div>
-            </form>}
+            </form>
         </>
         
     )
