@@ -168,16 +168,19 @@ label.file:hover{
   visibility: hidden;
 }
 
-.text-overlay.show {
+.text-overlay.show{
   text-align: center;
   position:absolute;
-  top:30%;
+  top:35%;
   visibility: visible;
   min-width: 100%;
   min-height:100%;
   color:white;
-  pointer-events: none
+  pointer-events: none;
+  padding:5px 30px 5px;
+
 }
+
 
 
 

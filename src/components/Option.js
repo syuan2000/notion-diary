@@ -8,7 +8,7 @@ import { IconButton } from '@mui/material';
 import { Delete, MoreHoriz, ZoomIn } from '@mui/icons-material';
 import deleteDocument from '../firebase/deleteDocument';
 
-export default function Option({setSelectedImg, setSelectedDetail, selectedImg}) {
+export default function Option({setSelectedImg, setSelectedDetail, selectedImg, setIsEdit}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -18,7 +18,13 @@ export default function Option({setSelectedImg, setSelectedDetail, selectedImg})
     setAnchorEl(null);
   };
   const handleDetail = () =>{
-    setSelectedImg(selectedImg.url);
+    setSelectedImg(selectedImg);
+    setSelectedDetail(selectedImg.formDetail);
+
+  }
+  const handleUpdate = () =>{
+    setIsEdit(true);
+    setSelectedImg(selectedImg);
     setSelectedDetail(selectedImg.formDetail);
 
   }
@@ -89,6 +95,12 @@ export default function Option({setSelectedImg, setSelectedDetail, selectedImg})
             <ZoomIn />
           </ListItemIcon>
           Detail
+        </MenuItem>
+        <MenuItem onClick={handleUpdate}>
+          <ListItemIcon>
+            <ZoomIn />
+          </ListItemIcon>
+          Edit
         </MenuItem>
         <MenuItem onClick={handleDelete}>
           <ListItemIcon>

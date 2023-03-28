@@ -5,7 +5,7 @@ import {Typography} from '@mui/material';
 import moment from 'moment';
 import Option from './Option';
 
-const ImageGrid =({ setSelectedImg, setSelectedDetail, tagFilter}) => {
+const ImageGrid =({ setSelectedImg, setSelectedDetail, tagFilter, setIsEdit}) => {
 
     const {doc} = useFirestore('images');
     const [hoverIndex, setHoverIndex] = useState(null);
@@ -64,10 +64,9 @@ const ImageGrid =({ setSelectedImg, setSelectedDetail, tagFilter}) => {
                     <h2 >
                         {d.formDetail.title}
                     </h2>
-                    <p>{d.formDetail.date}</p>
                 </div>
                 
-                <Option setSelectedImg={setSelectedImg} setSelectedDetail={setSelectedDetail} selectedImg={d}/>
+                <Option setSelectedImg={setSelectedImg} setSelectedDetail={setSelectedDetail} selectedImg={d} setIsEdit={setIsEdit} />
             </motion.div>
             
       ))}

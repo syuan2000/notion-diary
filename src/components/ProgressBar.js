@@ -3,7 +3,7 @@ import useStorage from "../hooks/useStorage";
 import {motion} from 'framer-motion';
 
 
-const ProgressBar = ({file, setFile, formDetail}) =>{
+const ProgressBar = ({file, setFile, formDetail, setShowForm}) =>{
 
     const {url, progress} = useStorage(file, formDetail);
 
@@ -12,6 +12,7 @@ const ProgressBar = ({file, setFile, formDetail}) =>{
     useEffect(()=>{
         if (url){
             setFile(null);
+            setShowForm(false);
         }
     },[url, setFile])
 

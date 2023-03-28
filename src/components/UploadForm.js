@@ -1,34 +1,37 @@
 import React, {useState, useEffect} from 'react'
 import { DayPicker}  from 'react-day-picker';
 import { format } from 'date-fns';
+import {motion} from 'framer-motion';
 import 'react-day-picker/dist/style.css';
 import ProgressBar from './ProgressBar';
 import { Tooltip , IconButton} from '@mui/material';
 import { PostAdd, PhotoCamera, Delete} from '@mui/icons-material';
 import Select from 'react-select';
+import { parse } from 'date-fns';
 import makeAnimated from 'react-select/animated';
 const animatedComponents = makeAnimated();
-const Tags = [
-  { label: "Brunch", value: "Brunch" },
-  { label: "Lunch/Dinner", value: "Lunch/Dinner" },
-  { label: "Cafe", value: "Cafe" },
-  { label: "Dessert", value: "Dessert"}
-];
 
-const UploadForm = ({showForm}) =>{
+const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEdit, setIsEdit, handleUpdate, Tags}) =>{
+
+    function filterTagsByValue(values) {
+        const updatedTags = [];
+        values.forEach(v => {
+          updatedTags.push(...Tags.filter(tag => tag.value === v));
+        });
+        return updatedTags;
+      }
 
     // so we don't need to create state for each input
     const formInitialDetails={
         title:"",
         date:"",
-        tag:[""],
-        comment:[""]
+        tag:[],
+        comment: [{ comment: "" }]
     }
 
     const [formDetail, setFormDetail] = useState(formInitialDetails);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
-
     const type = ['image/png','image/jpeg']
 
     
@@ -62,26 +65,28 @@ const UploadForm = ({showForm}) =>{
     // deal with tags
     const [selectedTag, setSelectedTag] = useState([]);
     const addTag = (option) =>{
-        setSelectedTag(option);
-    }
+        setSelectedTag(option);    }
+    useEffect(() => {
+        const tag = selectedTag.map(t => t.value);
+        onFormUpdate('tag', tag);
+    }, [selectedTag]);
 
     // deal with date picker
-    const [selectedDay, setSelectedDay] = useState();
-    const footer = selectedDay ? (
-        <p>{format(selectedDay, 'PPP')}</p>
-      ) : (
-        <p>Please pick a day.</p>
-      );
+    const [selectedDay, setSelectedDay] = useState(selectedDetail ? parse(selectedDetail.date, 'PPP', new Date()) : undefined);
+    const handleDayChange = (day) => {
+        setSelectedDay(day);
+        onFormUpdate('date', format(day, 'PPP'));
+      };
+      const month = selectedDay ? new Date(selectedDay.getFullYear(), selectedDay.getMonth()) : undefined;
+      const footer = selectedDay ? <p>{format(selectedDay, 'PPP')}</p> : <p>Please pick a day.</p>;
 
     const changeHandler = (e) =>{
-        let selected = e.target.files[0];
-        onFormUpdate('date',selectedDay ? format(selectedDay, 'PPP'): "")
-        let tag = selectedTag.map(t=>t.value)
-        onFormUpdate('tag',tag)
+        let selected = e.target.files[0];        
 
         if (selected && type.includes(selected.type)){
             setFile(selected);
             setError(null);
+
         }else{
             setFile(null);
             setError('Please select an image file(.png or .jpeg)');
@@ -94,15 +99,35 @@ const UploadForm = ({showForm}) =>{
             setInputFields([{comment:""}]);
             setFormDetail(formInitialDetails);
             setSelectedDay();
+            setSelectedTag([]);
         }
     }, [showForm])
 
+    useEffect(()=>{
+        if (isEdit){
+            setFormDetail(selectedDetail);
+            setSelectedDay(parse(selectedDetail.date, 'PPP', new Date()));
+            setSelectedTag(selectedDetail.tag);
+            setInputFields(selectedDetail.comment);
+        }
+    }, [isEdit])
+    
+
+    const handleFileUpdate=(e)=>{
+        e.preventDefault();
+        console.log(formDetail)
+        handleUpdate(formDetail);
+    }
+
     return(
         <>
-            <form>
+            <motion.form
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            >
                 <input className='inputText' type="text" placeholder='Title' value={formDetail.title} onChange={(e)=> onFormUpdate('title', e.target.value)} required="required"/>
                 <br />
-                <Select options={Tags} components={animatedComponents} placeholder="Select one or multiple tags" onChange={addTag} isMulti />
+                <Select options={Tags} components={animatedComponents} placeholder="Select one or multiple tags" onChange={addTag} isMulti defaultValue={selectedDetail? filterTagsByValue(selectedDetail.tag): null}/>
                 {inputFields.map((input, index) => {
                     return (
                         <div key={index}>
@@ -127,22 +152,30 @@ const UploadForm = ({showForm}) =>{
                 
                 <DayPicker className='inputDate' mode="single"
                     selected={selectedDay}
-                    onSelect={setSelectedDay}
-                    footer={footer}  />
+                    onSelect={handleDayChange}
+                    footer={footer}  
+                    month={month}/>
                 <br />
-                <Tooltip title="Upload image file" placement='right'>
+                {isEdit? 
+                (<>
+                    <button onClick={handleFileUpdate}>Submit Change(s)</button>
+                    <button onClick={()=> {setIsEdit(false); setSelectedImg(null)}}>Cancel</button>
+                </>)
+                :<Tooltip title="Upload image file" placement='right'>
                     <IconButton  aria-label="upload picture" component="label">
                         <input hidden type="file" onChange={changeHandler}></input>
-                        <PhotoCamera />
+                        <PhotoCamera /> 
                     </IconButton> 
                 </Tooltip>
+                }
+                
                 <div className='output'>
                     {error && <div className='error'>{ error }</div>}
                     {file && 
-                    <ProgressBar file={file} setFile={setFile} formDetail={formDetail} />
+                    <ProgressBar file={file} setFile={setFile} formDetail={formDetail} setShowForm={setShowForm}/>
                 }
                 </div>
-            </form>
+            </motion.form>
         </>
         
     )

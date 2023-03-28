@@ -3,6 +3,7 @@ import {motion} from 'framer-motion';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 
 
 const Modal = ({selectedImg, setSelectedImg, selectedDetail}) => {
@@ -27,11 +28,14 @@ const Modal = ({selectedImg, setSelectedImg, selectedDetail}) => {
                 <Col xs={2}>
                 </Col>
                 <Col>
-                <div className='wrap'><img src={selectedImg} alt="enlarged pic" /></div>
+                <div className='wrap'><img src={selectedImg.url} alt="enlarged pic" /></div>
                 
                 <div style={{textAlign:'center'}} className='rowDisplay'>
                   <h2 >/ {selectedDetail.title} /</h2>
-                  <p style={{fontSize:'12px'}}>{selectedDetail.date}</p>
+                  <div style={{display: "flex", justifyContent: "center"}}>
+                  <RestaurantMenuIcon /><span style={{fontSize:'12px'}}> {selectedDetail.date}</span>
+
+                  </div>
                   
                 </div>
               </Col>
