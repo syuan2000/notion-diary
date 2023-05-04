@@ -11,10 +11,10 @@
 body{
   font-family: "Noto Serif";
   color: var(--secondary);
+  
 }
 .App{
-  max-width: 960px;
-  margin: 0 auto;
+  margin: 0;
 }
 .title h1{
   margin-top: 20px;
@@ -215,11 +215,16 @@ label.file:hover{
   
 }
 
+.textDetail{
+  text-align: center;
+  position:absolute;
+  top:30%;
+}
+
 .comment{
   display: inline-block;
   text-align: left;
-  position:absolute;
-  top:50%;
+  
 }
 .comment li{
   list-style-image: url("./assets/image/message.svg");
@@ -233,8 +238,75 @@ label.file:hover{
   .rowDisplay{
     display: none;
   }
-
   
+}
+
+.imageWrap{
+  position: relative;
+  max-width: 700px;
+  height: 500px;
+  margin: 100px auto 0;
+
+}
+.sliderImage{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+  transition: opacity ease-in-out 0.4s;
+  
+}
+.sliderImage img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.active{
+  opacity:1;
+}
+
+.sliderBtn{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  border: 1px solid rgba(34, 34, 34, 0.287);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.next{
+  top: 50%;
+  right: 20px;
+}
+.prev{
+  top: 50%;
+  left: 20px;
+}
+
+.sliderDot{
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.dot{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #f1f1f1;
+  margin: 0 5px;
+  background: #f1f1f1;
+}
+
+.dot.active {
+  background: rgb(108, 107, 107);
 }
 
 

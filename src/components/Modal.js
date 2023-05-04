@@ -30,22 +30,24 @@ const Modal = ({selectedImg, setSelectedImg, selectedDetail}) => {
                 <Col>
                 <div className='wrap'><img src={selectedImg.url} alt="enlarged pic" /></div>
                 
-                <div style={{textAlign:'center'}} className='rowDisplay'>
-                  <h2 >/ {selectedDetail.title} /</h2>
-                  <div style={{display: "flex", justifyContent: "center"}}>
-                  <RestaurantMenuIcon /><span style={{fontSize:'12px'}}> {selectedDetail.date}</span>
-
-                  </div>
-                  
-                </div>
+                
               </Col>
             
               <Col>
-                <ul className='comment'>
-                  {selectedDetail.comment.map((input, index)=>(
-                    <li key={index} style={{'margin-bottom':'20px', 'fontSize':'20px'}}>{input.comment}</li>
-                  ))}
-                </ul>
+                <div className='textDetail'>
+                  <h2 >/ {selectedDetail.title} /</h2>
+                  <div style={{display: "flex", justifyContent: "center"}}>
+                    <RestaurantMenuIcon /><span style={{fontSize:'14px'}}> {selectedDetail.date}</span>
+                  
+                  </div>
+                  <div  className='comment'>
+                    <ul >
+                    {selectedDetail.comment.map((input, index)=>(
+                      <li key={index} style={{marginTop:'10vh', fontSize:'20px'}}>{input.comment}</li>
+                    ))}
+                    </ul>
+                  </div>
+                </div>
               </Col>
           </Row>
         </motion.div> 

@@ -37,10 +37,14 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
     
     // leaves the rest of the details intact only change one field
     const onFormUpdate = (category, value) =>{
+        console.log(formDetail)
         setFormDetail({
             ...formDetail,
             [category]: value
-        })
+        });
+        if (category === 'comment') {
+            setInputFields(value);
+        }
     }
 
     // deal with comments
@@ -65,14 +69,14 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
     // deal with tags
     const [selectedTag, setSelectedTag] = useState([]);
     const addTag = (option) =>{
-        setSelectedTag(option);    }
-    useEffect(() => {
-        const tag = selectedTag.map(t => t.value);
-        onFormUpdate('tag', tag);
-    }, [selectedTag]);
+        const tag = option.map(t => t.value);
+        console.log(tag)
+        setSelectedTag(option);
+        setFormDetail({...formDetail, tag});
+    }
 
     // deal with date picker
-    const [selectedDay, setSelectedDay] = useState(selectedDetail ? parse(selectedDetail.date, 'PPP', new Date()) : undefined);
+    const [selectedDay, setSelectedDay] = useState(selectedDetail ? parse(selectedDetail.date, 'PPP', new Date()) : new Date());
     const handleDayChange = (day) => {
         setSelectedDay(day);
         onFormUpdate('date', format(day, 'PPP'));
@@ -95,7 +99,7 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
 
     //reset form
     useEffect(()=>{
-        if (!showForm){
+        if (!showForm || (showForm && !isEdit)){
             setInputFields([{comment:""}]);
             setFormDetail(formInitialDetails);
             setSelectedDay();
@@ -115,7 +119,7 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
 
     const handleFileUpdate=(e)=>{
         e.preventDefault();
-        console.log(formDetail)
+        console.log(selectedDetail)
         handleUpdate(formDetail);
     }
 
