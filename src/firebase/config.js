@@ -1,9 +1,10 @@
-// Import the functions you need from the SDKs you need
+// Import Firebase v9+ (modular) and compat for older features
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import 'firebase/compat/firestore';
+import { getAuth } from 'firebase/auth';
 
-// Your web app's Firebase configuration
+// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDyN4HBZ1Or6bhvgoZEaJIEL3jOetI0l9w",
   authDomain: "notion-diary-3b39d.firebaseapp.com",
@@ -14,11 +15,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 
+// Firebase services
 const projectStorage = firebase.storage();
 const projectFirestore = firebase.firestore();
+const auth = getAuth(app); // ✅ Fix: Correctly initialize Firebase Auth
 
+// Firestore timestamp
 const timestamp = firebase.firestore.FieldValue.serverTimestamp;
 
-export {projectFirestore, projectStorage, timestamp};
+export { projectFirestore, projectStorage, timestamp, auth };
