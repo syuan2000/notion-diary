@@ -5,8 +5,9 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
 import { IconButton } from '@mui/material';
-import { Delete, MoreHoriz, ZoomIn } from '@mui/icons-material';
+import { Delete, MoreHoriz, ZoomIn, Edit } from '@mui/icons-material';
 import deleteDocument from '../firebase/deleteDocument';
+
 
 export default function Option({setSelectedImg, setSelectedDetail, selectedImg, setIsEdit}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -49,7 +50,6 @@ export default function Option({setSelectedImg, setSelectedDetail, selectedImg, 
               right: 0,
               top: 0,
               color: 'white',
-              background: 'rgba(0,0,0,.3)',
             }}
           >
             <MoreHoriz fontSize="large" />
@@ -98,7 +98,7 @@ export default function Option({setSelectedImg, setSelectedDetail, selectedImg, 
         </MenuItem>
         <MenuItem onClick={handleUpdate}>
           <ListItemIcon>
-            <ZoomIn />
+            <Edit />
           </ListItemIcon>
           Edit
         </MenuItem>
