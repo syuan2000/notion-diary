@@ -1,32 +1,45 @@
-import React, { useEffect } from "react";
-import useStorage from "../hooks/useStorage";
+import React, { useEffect, useState } from "react";
 import {motion} from 'framer-motion';
 
+const ProgressBar = ({setUploadComplete}) => {
+    const [progress, setProgress] = useState(0);
 
-const ProgressBar = ({file, setFile, formDetail, setShowForm}) =>{
-
-    const {url, progress} = useStorage(file, formDetail);
-
-    // when the url is generated, means the file finished uploading
-    // we would want to stop showing the progress bar
-    useEffect(()=>{
-        if (url){
-            setFile(null);
-            setShowForm(false);
+    useEffect(() => {
+        let interval;
+        
+        if (progress < 100) {
+            interval = setInterval(() => {
+                setProgress(prevProgress => {
+                    return prevProgress + 10;
+                });
+            }, 500);
         }
-    },[url, setFile])
+
+        // Cleanup function
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (progress >= 100) {
+            setUploadComplete(true);
+        }
+    }, [progress, setUploadComplete]);
 
 
-    return(
+    return (
         <div>
-        <motion.div className="progress-bar"
-            initial={{ width: 0 }}
-            animate={{ width: progress + '%' }}
+            <motion.div className="progress-bar"
+                initial={{ width: 0 }}
+                animate={{ width: progress + '%' }}
             > 
             </motion.div>
-        <p>Loading... {progress}%</p>
+            <p>Loading... {progress}%</p>
         </div>
-    )
-}
+    );
+};
 
 export default ProgressBar;

@@ -11,7 +11,7 @@ const Navbar = () => {
             <LeftContainer>
                 <NavbarLinkContainer>
                     <NavbarLink to="/">Home</NavbarLink>
-                    <NavbarLink to="/test">Gallery</NavbarLink>
+                    <NavbarLink to="/gallery">Gallery</NavbarLink>
                     <OpenLinksButton onClick={()=> {
                         setExtend((cur)=>!cur)
                         }}>
@@ -25,7 +25,7 @@ const Navbar = () => {
         </InnerContainer>
         {extend && <ExtendContainer>
             <NavbarExtendLink to="/">Home</NavbarExtendLink>
-            <NavbarExtendLink to="/test">Gallery</NavbarExtendLink>
+            <NavbarExtendLink to="/gallery">Gallery</NavbarExtendLink>
         </ExtendContainer>}
         
     </NavbarContainer>

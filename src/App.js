@@ -57,11 +57,33 @@ function App() {
       }
     }
     return(
-      <div style={{maxWidth: "960px", margin: "0 auto"}}>
-        <Title/>
-        {!isEdit && <label className='file' onClick={() => setShowForm(!showForm)}>
-          {showForm ? '-' : '+'} 
-        </label>}
+      <div style={{maxWidth: "960px", margin: "0 auto", padding: "0 16px"}}>
+        <div className='title' style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'flex-start',
+          paddingTop: '70px',
+          marginBottom: '24px'
+        }}>
+          <Title />
+          {!isEdit && 
+            <button 
+              className='add-post-btn' 
+              onClick={() => setShowForm(!showForm)}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#000',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                marginTop: '20px'
+              }}
+            >
+              Add Post
+            </button>
+          }
+        </div>
         {(showForm || isEdit) && <UploadForm showForm ={showForm} setShowForm={setShowForm} selectedDetail={selectedDetail} setSelectedImg={setSelectedImg} isEdit={isEdit} setIsEdit={setIsEdit} handleUpdate={handleUpdate} Tags={Tags}/>}
         {!showForm && !isEdit && 
         <div>
@@ -81,22 +103,10 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/"  element={<Home />} />
-          <Route path="/test"  element={<Test />} />
+          <Route path="/gallery"  element={<Test />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
-      {/* {!isEdit && <label className='file' onClick={() => setShowForm(!showForm)}>
-        {showForm ? '-' : '+'} 
-      </label>}
-      {(showForm || isEdit) && <UploadForm showForm ={showForm} setShowForm={setShowForm} selectedDetail={selectedDetail} setSelectedImg={setSelectedImg} isEdit={isEdit} setIsEdit={setIsEdit} handleUpdate={handleUpdate} Tags={Tags}/>}
-      {!showForm && !isEdit && 
-      <div>
-        <Select options={Tags} components={animatedComponents} placeholder="Select one or multiple tags" onChange={addTag} isMulti />
-        <br />
-        <ImageGrid setSelectedImg={setSelectedImg} setSelectedDetail={setSelectedDetail} tagFilter={tagFilter} setIsEdit={setIsEdit}/>
-       </div>
-       }
-      {selectedImg && !isEdit && < Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} selectedDetail={selectedDetail} />} */}
     </div>
   );
 }
