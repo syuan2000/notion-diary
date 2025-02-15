@@ -115,7 +115,7 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
     // Move useStorage to component level
     const { startUpload, error: uploadError } = useStorage(file, formDetail);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!isFormValid) {
             setError('Please fill in all required fields (title, date, and tags)');
@@ -123,10 +123,11 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
         }
         
         try {
-            await startUpload();
+            startUpload();
+            setShowForm(false);
             setFile(null);
             setUploadComplete(false);
-            setShowForm(false);
+           
         } catch (err) {
             setError('Failed to upload file: ' + err.message);
         }
@@ -152,7 +153,7 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
         setInputFields([{comment:""}]);
         setFormDetail(formInitialDetails);
         setSelectedDay(null);
-        setSelectedTag([]);
+        setSelectedImg(null)
         setUploadComplete(false);
         setError(null);
         setIsEdit(false);
@@ -249,7 +250,7 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
                 style={formStyles.form}
             >
                 <div style={formStyles.header}>
-                    <h2 style={{ margin: 0 }}>Add New Post</h2>
+                    <h2 style={{ margin: 0 }}> {isEdit ? 'Edit Post' : 'Add New Post'}</h2>
                     <div>
                         {isEdit ? (
                             <>
@@ -260,8 +261,8 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
                                     Submit Change(s)
                                 </button>
                                 <button 
-                                    onClick={() => {setIsEdit(false); setSelectedImg(null)}}
-                                    style={{...formStyles.button, ...formStyles.cancelButton, marginLeft: '8px'}}
+                                    onClick={handleCancel}
+                                    style={{...formStyles.button, ...formStyles.cancelButton}}
                                 >
                                     Cancel
                                 </button>
@@ -305,7 +306,7 @@ const UploadForm = ({showForm, setShowForm, selectedDetail, setSelectedImg, isEd
                     placeholder="Select one or multiple tags *" 
                     onChange={addTag} 
                     isMulti 
-                    defaultValue={selectedDetail? filterTagsByValue(selectedDetail.tag): null}
+                    defaultValue={selectedDetail && isEdit ? filterTagsByValue(selectedDetail.tag) : null}
                     styles={{
                         control: (base) => ({
                             ...base,

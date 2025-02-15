@@ -85,13 +85,13 @@ function App() {
           }
         </div>
         {(showForm || isEdit) && <UploadForm showForm ={showForm} setShowForm={setShowForm} selectedDetail={selectedDetail} setSelectedImg={setSelectedImg} isEdit={isEdit} setIsEdit={setIsEdit} handleUpdate={handleUpdate} Tags={Tags}/>}
-        {!showForm && !isEdit && 
+
         <div>
           <Select options={Tags} components={animatedComponents} placeholder="Select one or multiple tags" onChange={addTag} isMulti />
           <br />
           <ImageGrid setSelectedImg={setSelectedImg} setSelectedDetail={setSelectedDetail} tagFilter={tagFilter} setIsEdit={setIsEdit}/>
         </div>
-        }
+
         {selectedImg && !isEdit && < Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} selectedDetail={selectedDetail} />}
       </div>
     )

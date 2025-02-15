@@ -24,8 +24,8 @@ const Navbar = () => {
             </RightContainer>
         </InnerContainer>
         {extend && <ExtendContainer>
-            <NavbarExtendLink to="/">Home</NavbarExtendLink>
-            <NavbarExtendLink to="/gallery">Gallery</NavbarExtendLink>
+            <NavbarExtendLink to="/" onClick={() => setExtend(false)}>Home</NavbarExtendLink>
+            <NavbarExtendLink to="/gallery" onClick={() => setExtend(false)}>Gallery</NavbarExtendLink>
         </ExtendContainer>}
         
     </NavbarContainer>
